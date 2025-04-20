@@ -1,0 +1,41 @@
+{
+    "name": "fullstack_912",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "type": "module",
+    "scripts": {
+      "start": "node app.js",
+      "dev": "nodemon app.js"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/Bppatkar/cactro_fullStack.git"
+    },
+    "keywords": [
+      "backend",
+      "node",
+      "express",
+      "mongoose",
+      "mongodb",
+      "cactro"
+    ],
+    "author": "Bhanu Prata Patkar",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/Bppatkar/cactro_fullStack/issues"
+    },
+    "homepage": "https://github.com/Bppatkar/cactro_fullStack#readme",
+    "dependencies": {
+      "axios": "^1.8.3",
+      "cors": "^2.8.5",
+      "dotenv": "^16.4.7",
+      "express": "^4.21.2",
+      "google-auth-library": "^9.15.1",
+      "googleapis": "^146.0.0",
+      "mongoose": "^8.12.1"
+    },
+    "devDependencies": {
+      "nodemon": "^3.1.9"
+    }
+  }
