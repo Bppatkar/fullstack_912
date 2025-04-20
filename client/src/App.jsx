@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import VideoDetails from './components/VideoDetails.jsx';
-import "./App.css"
+import "./app.css";
 
 function App() {
-  const [videoId, setVideoId] = useState('dQw4w9WgXcQ'); // we can change this ID for testing
+  const [videoId, setVideoId] = useState('SnZFWyqRiSY'); // we can change this ID for testing
 
   return (
     <div>
