@@ -1,17 +1,33 @@
 # fullstack_912
 
+# YouTube Companion Dashboard
 
-# API End Point
+## API Endpoints
 
-GET    api/video/:videoId          - Get video details with comments and notes
-PATCH  /api/video/:videoId         - Update video title/description
+- `GET /api/videos/:videoId` - Fetch video details.
+- `PUT /api/videos/:videoId` - Update video title and description.
+- `POST /api/videos/:videoId/comments` - Add a comment.
+- `DELETE /api/videos/:videoId/comments/:commentId` - Delete a comment.
+- `POST /api/videos/:videoId/notes` - Save notes.
 
-POST   /api/video/:videoId/comments  - allows users to add a comment to a video.
-DELETE  /api/video/comments/:commentId  - delete comment
+## Database Schema
 
-POST   /api/video/:videoId/notes  - save note for video
+### Video
 
-___
+- `title`: String
+- `description`: String
+
+### Comment
+
+- `videoId`: ObjectId
+- `text`: String
+
+### Note
+
+- `videoId`: ObjectId
+- `content`: String
+
+---
 
 ✅ Quick Summary of What’s Working Now
 🔐 Auth System: Register, login, logout, get current user.
@@ -27,3 +43,28 @@ ___
 🔁 Nodemon: Auto-restarting on code changes.
 
 ✅ No more route crashes.
+
+---
+
+# Server Folder Strucuture
+
+/server
+├── /controllers
+│ └── video.controller.js
+├── /db
+│ └── connection.js
+├── /models
+│ ├── comment.model.js
+│ ├── log.model.js
+│ ├── note.model.js
+│ └── video.model.js
+├── /routes
+│ └── video.route.js
+├── /services
+│ └── youtube.service.js
+├── /utils
+│ └── logger.js
+├── app.js
+├── .env
+├── package.json
+└── README.md

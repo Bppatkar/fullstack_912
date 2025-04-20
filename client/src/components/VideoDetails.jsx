@@ -1,84 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import { fetchVideoDetails, addComment, deleteComment, saveNotes } from '../api.jsx';
-import AddComment from './AddComment.jsx';
-import AddNotes from './AddNotes.jsx';
+import React, { useEffect, useState } from "react";
+import { fetchVideoDetails, addComment, deleteComment } from "../api";
 
 const VideoDetails = ({ videoId }) => {
   const [video, setVideo] = useState(null);
-  const [error, setError] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
-    const getVideoDetails = async () => {
+    const loadVideoDetails = async () => {
       try {
         const data = await fetchVideoDetails(videoId);
-        setVideo(data);
+        setVideo(data.video);
+        setComments(data.comments);
       } catch (error) {
-        setError('Failed to fetch video details');
+        console.error("Failed to load video details:", error);
       }
     };
 
-    getVideoDetails();
+    loadVideoDetails();
   }, [videoId]);
 
-  const handleAddComment = async (comment) => {
+  const handleAddComment = async () => {
     try {
-      await addComment(videoId, comment);
-      const data = await fetchVideoDetails(videoId); // Refresh the video details
-      setVideo(data);
+      const comment = await addComment(videoId, newComment);
+      setComments([...comments, comment]);
+      setNewComment("");
     } catch (error) {
-      setError('Failed to add comment');
+      console.error("Failed to add comment:", error);
     }
   };
 
   const handleDeleteComment = async (commentId) => {
     try {
-      await deleteComment(commentId);
-      const data = await fetchVideoDetails(videoId); // Refresh the video details
-      setVideo(data);
+      await deleteComment(videoId, commentId);
+      setComments(comments.filter((comment) => comment.id !== commentId));
     } catch (error) {
-      setError('Failed to delete comment');
+      console.error("Failed to delete comment:", error);
     }
   };
 
-  const handleSaveNotes = async (notes) => {
-    try {
-      await saveNotes(videoId, notes);
-      const data = await fetchVideoDetails(videoId); // Refresh the video details
-      setVideo(data);
-    } catch (error) {
-      setError('Failed to save notes');
-    }
-  };
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (!video) {
-    return <div>Loading...</div>;
-  }
+  if (!video) return <p>Loading...</p>;
 
   return (
     <div>
-      <h1>{video.video.title}</h1>
-      <p>{video.video.description}</p>
-      <img src={video.video.thumbnails.default.url} alt="Thumbnail" />
-      <p>{`Published: ${video.video.publishedAt}`}</p>
-
-      <h3>Comments</h3>
-      {video.comments.map((comment) => (
-        <div key={comment.commentId}>
-          <p>{comment.text}</p>
-          <button onClick={() => handleDeleteComment(comment.commentId)}>Delete</button>
-        </div>
-      ))}
-
-      <AddComment onAddComment={handleAddComment} />
-
-      <h3>Notes</h3>
-      <p>{video.notes.notes}</p>
-
-      <AddNotes onSaveNotes={handleSaveNotes} />
+      <h1>{video.title}</h1>
+      <p>{video.description}</p>
+      <h2>Comments</h2>
+      <ul>
+        {comments.map((comment) => (
+          <li key={comment.id}>
+            {comment.text}
+            <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+      <input
+        type="text"
+        value={newComment}
+        onChange={(e) => setNewComment(e.target.value)}
+        placeholder="Add a comment"
+      />
+      <button onClick={handleAddComment}>Add Comment</button>
     </div>
   );
 };

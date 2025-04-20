@@ -3,8 +3,7 @@ import VideoDetails from './components/VideoDetails.jsx';
 import "./app.css";
 
 function App() {
-  const [videoId, setVideoId] = useState('SnZFWyqRiSY'); // we can change this ID for testing
-
+  const [videoId, setVideoId] = useState('m28NrA9DKvk'); // we can change this ID for testing
   return (
     <div>
       <h1>Video Details App</h1>

@@ -4,9 +4,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import connectDB from './db/connection.js';
 import videoRoutes from './routes/video.route.js';
-import authRoutes from './routes/auth.route.js';
-import passport from 'passport';
-import './config/passport.js';
+
 
 dotenv.config();
 
@@ -14,19 +12,18 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: 'http://localhost:5173',
   credentials: true
 }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(passport.initialize());
 
 // Database connection
 connectDB();
 
 // Routes
 app.use('/api/video', videoRoutes);
-app.use('/api/auth', authRoutes);
+
 
 // Health check
 app.get('/api/health', (req, res) => {
