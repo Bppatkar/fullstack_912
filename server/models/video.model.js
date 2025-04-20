@@ -1,29 +1,22 @@
 import mongoose from 'mongoose';
 
 const videoSchema = new mongoose.Schema({
-  videoId: { 
-    type: String, 
+  videoId: {
+    type: String,
     required: true,
-    unique: true 
+    unique: true
   },
-  title: { 
-    type: String, 
-    required: true 
-  },
-  description: String,
-  thumbnail: String,
-  userId: { 
-    type: mongoose.Schema.Types.ObjectId, 
+  customTitle: String,
+  customDescription: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true 
+    required: true
   },
-  lastFetched: { 
-    type: Date, 
-    default: Date.now 
+  lastFetched: {
+    type: Date,
+    default: Date.now
   }
 }, { timestamps: true });
 
-const Video = mongoose.model('Video', videoSchema);
-
-
-export default Video;
+export default mongoose.model('Video', videoSchema);

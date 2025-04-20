@@ -16,18 +16,19 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  googleId: String,
   youtubeAccessToken: String,
-refreshToken: String,
-  refreshToken: String
+  refreshToken: String,
+  googleId: String
 }, { timestamps: true });
 
+// Password hashing middleware
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 
+// Password comparison method
 userSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };

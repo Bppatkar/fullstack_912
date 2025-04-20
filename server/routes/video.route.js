@@ -1,25 +1,28 @@
 import express from 'express';
 import {
-  getVideo,
-  updateVideo,
-  deleteVideo,
-  getVideoComments,
-  addComment
+  getVideoDetails,
+  updateVideoDetails,
+  addComment,
+  deleteComment,
+  saveNotes
 } from '../controllers/video.controller.js';
-import  {authenticate}  from '../middleware/auth.middleware.js';
+import { authenticate, youtubeAuth } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-// Authenticate all video routes
+// Apply authentication and YouTube auth to all routes
 router.use(authenticate);
+router.use(youtubeAuth);
 
 // Video routes
-router.get('/:videoId', getVideo);
-router.patch('/:videoId', updateVideo);
-router.delete('/:videoId', deleteVideo);
+router.get('/:videoId', getVideoDetails);
+router.patch('/:videoId', updateVideoDetails);
 
 // Comment routes
-router.get('/:videoId/comments', getVideoComments);
 router.post('/:videoId/comments', addComment);
+router.delete('/comments/:commentId', deleteComment);
+
+// Notes routes
+router.post('/:videoId/notes', saveNotes);
 
 export default router;
