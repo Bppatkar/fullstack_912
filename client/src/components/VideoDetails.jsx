@@ -1,68 +1,48 @@
 import React, { useEffect, useState } from "react";
-import { fetchVideoDetails, addComment, deleteComment } from "../api";
+import axios from "axios";
 
-const VideoDetails = ({ videoId }) => {
+function VideoDetails({ videoId }) {
   const [video, setVideo] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const loadVideoDetails = async () => {
+    const fetchVideoDetails = async () => {
       try {
-        const data = await fetchVideoDetails(videoId);
-        setVideo(data.video);
-        setComments(data.comments);
-      } catch (error) {
-        console.error("Failed to load video details:", error);
+        setLoading(true);
+        const response = await axios.get(`http://localhost:8000/api/video/${videoId}`);
+        setVideo(response.data);
+      } catch (err) {
+        setError("Failed to fetch video details");
+      } finally {
+        setLoading(false);
       }
     };
 
-    loadVideoDetails();
+    fetchVideoDetails();
   }, [videoId]);
 
-  const handleAddComment = async () => {
-    try {
-      const comment = await addComment(videoId, newComment);
-      setComments([...comments, comment]);
-      setNewComment("");
-    } catch (error) {
-      console.error("Failed to add comment:", error);
-    }
-  };
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-  const handleDeleteComment = async (commentId) => {
-    try {
-      await deleteComment(videoId, commentId);
-      setComments(comments.filter((comment) => comment.id !== commentId));
-    } catch (error) {
-      console.error("Failed to delete comment:", error);
-    }
-  };
+  if (error) {
+    return <p>{error}</p>;
+  }
 
-  if (!video) return <p>Loading...</p>;
+  if (!video) {
+    return <p>No video details available</p>;
+  }
 
   return (
     <div>
-      <h1>{video.title}</h1>
+      <h2>{video.title}</h2>
       <p>{video.description}</p>
-      <h2>Comments</h2>
-      <ul>
-        {comments.map((comment) => (
-          <li key={comment.id}>
-            {comment.text}
-            <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-      <input
-        type="text"
-        value={newComment}
-        onChange={(e) => setNewComment(e.target.value)}
-        placeholder="Add a comment"
-      />
-      <button onClick={handleAddComment}>Add Comment</button>
+      <a href={video.url} target="_blank" rel="noopener noreferrer">
+        Watch Video
+      </a>
     </div>
   );
-};
+}
 
 export default VideoDetails;

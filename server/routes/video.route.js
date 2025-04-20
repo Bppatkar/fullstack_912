@@ -16,7 +16,6 @@ router.get("/:videoId", async (req, res) => {
 
     // Query using the custom videoId field
     const video = await Video.findOne({ videoId });
-    console.log("Querying database with videoId:", videoId);
     console.log("Video found:", video);
     if (!video) {
       return res.status(404).json({ message: "Video not found" });
