@@ -7,10 +7,10 @@ const API = axios.create({
 // Fetch video details
 export const fetchVideoDetails = async (videoId) => {
   try {
-    const response = await API.get(`/videos/${videoId}`);
+    const response = await API.get(`/${videoId}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching video details:", error);
+    console.error("Error fetching video details:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -18,10 +18,10 @@ export const fetchVideoDetails = async (videoId) => {
 // Update video details
 export const updateVideoDetails = async (videoId, data) => {
   try {
-    const response = await API.put(`/videos/${videoId}`, data);
+    const response = await API.put(`/${videoId}`, data);
     return response.data;
   } catch (error) {
-    console.error("Error updating video details:", error);
+    console.error("Error updating video details:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -29,10 +29,10 @@ export const updateVideoDetails = async (videoId, data) => {
 // Add a comment
 export const addComment = async (videoId, comment) => {
   try {
-    const response = await API.post(`/videos/${videoId}/comments`, { comment });
+    const response = await API.post(`/${videoId}/comments`, { comment });
     return response.data;
   } catch (error) {
-    console.error("Error adding comment:", error);
+    console.error("Error adding comment:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -40,10 +40,10 @@ export const addComment = async (videoId, comment) => {
 // Delete a comment
 export const deleteComment = async (videoId, commentId) => {
   try {
-    const response = await API.delete(`/videos/${videoId}/comments/${commentId}`);
+    const response = await API.delete(`/${videoId}/comments/${commentId}`);
     return response.data;
   } catch (error) {
-    console.error("Error deleting comment:", error);
+    console.error("Error deleting comment:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -51,10 +51,10 @@ export const deleteComment = async (videoId, commentId) => {
 // Save notes
 export const saveNotes = async (videoId, content) => {
   try {
-    const response = await API.post(`/videos/${videoId}/notes`, { content });
+    const response = await API.post(`/${videoId}/notes`, { content });
     return response.data;
   } catch (error) {
-    console.error("Error saving notes:", error);
+    console.error("Error saving notes:", error.response?.data || error.message);
     throw error;
   }
 };

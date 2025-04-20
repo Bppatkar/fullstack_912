@@ -1,22 +1,23 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema({
-  videoId: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  customTitle: String,
-  customDescription: String,
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  lastFetched: {
-    type: Date,
-    default: Date.now
-  }
-}, { timestamps: true });
+  videoId: { type: String, required: true, unique: true }, 
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  url: { type: String, required: true },
+  comments: [
+    {
+      text: String,
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
+  notes: [
+    {
+      content: String,
+      createdAt: { type: Date, default: Date.now },
+    },
+  ],
+});
 
-export default mongoose.model('Video', videoSchema);
+const Video = mongoose.model("Video", videoSchema);
+export default Video;
