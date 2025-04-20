@@ -1,26 +1,45 @@
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import cors from "cors"; // Import CORS
-import videoRoutes from "./routes/videoRoutes.js";
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import connectDB from './db/connection.js';
+import videoRoutes from './routes/video.route.js';
+import authRoutes from './routes/auth.route.js';
+
 
 dotenv.config();
+
 const app = express();
-const PORT = process.env.PORT || 8000;
 
 // Middleware
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  credentials: true
+}));
 app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.use(express.static('public')); 
+app.use(cookieParser());
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log(err));
+// Database connection
+connectDB();
 
 // Routes
-app.use("/api/video", videoRoutes);
+app.use('/api/video', videoRoutes);
+app.use('/api/auth', authRoutes);
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'healthy' });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
